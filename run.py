@@ -167,7 +167,7 @@ def perform_move(move):
     segments = [start_point] + mid_points + [end_point]
 
 
-    body =  culebratester_client.SwipeBody(segments=segments, segment_steps=5)
+    body =  culebratester_client.SwipeBody(segments=segments, segment_steps=3)
 
     start_time = time.time()
     api_instance.ui_device_swipe_post(body=body)

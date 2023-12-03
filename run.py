@@ -8,7 +8,12 @@ import pyautogui
 from ppadb.client import Client
 from functools import lru_cache
 from multiprocessing import Pool
+import culebratester_client
+from culebratester_client.models import Point
 
+CONFIGURATION = None
+
+api_instance = culebratester_client.DefaultApi(culebratester_client.ApiClient(CONFIGURATION))
 
 ITEMS = {
     'burger': 1,
@@ -150,9 +155,14 @@ def perform_move(move):
     start_y += grid_top
     end_x += grid_left
     end_y += grid_top
+    
+    start_point = Point(x=int(start_x), y=int(start_y))
+    end_point = Point(x=int(end_x), y=int(end_y))
+    segments = [start_point, end_point]
 
-    device.shell(f'input swipe {start_x} {start_y} {end_x} {end_y} 100')
+    body =  culebratester_client.SwipeBody(segments=segments, segment_steps=10)
 
+    api_instance.ui_device_swipe_post(body=body)
 
 
 def main():

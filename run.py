@@ -6,6 +6,7 @@ import numpy as np
 import tkinter as tk
 import pyautogui
 from ppadb.client import Client
+from multiprocessing import Pool
 
 ITEMS = {
     'burger': 1,
@@ -76,9 +77,7 @@ def get_grid(screenshot_gray):
                     break
     return grid
 
-def game_state_locked(device):
-    screenshot_gray = get_screenshot(device)
-    grid = get_grid(screenshot_gray)
+def game_state_locked(screenshot_gray, grid):
     if any(0 in row for row in grid):
         # If any tile is empty, the game is locked
         return True
@@ -151,7 +150,7 @@ def main():
         screenshot_gray = get_screenshot(device)
         grid = get_grid(screenshot_gray)
         best_move = find_best_move(grid)
-        if best_move is not None and not game_state_locked(device):
+        if best_move is not None and not game_state_locked(screenshot_gray, grid):
             perform_move(best_move)
             time.sleep(2)  
         else:
@@ -161,7 +160,6 @@ def main():
             print(row)
 
 main()
-
 
 # root = tk.Tk()
 

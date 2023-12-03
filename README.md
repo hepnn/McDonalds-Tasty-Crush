@@ -1,4 +1,4 @@
-﻿# McDonalds-Tasty-Crush - WIP
+﻿# McDonalds-Tasty-Crush
 
 
 1. Capture device screen, crop game board
@@ -21,3 +21,7 @@ You can do so by enabling `Pointer location` in android developer settings and t
 3. Convert the RGB images to greyscale
 4. Use OpenCV to match given template assets with the game board items
 5. Use brute force to find the best move (this should be improved)
+
+
+TODO:
+Improve screenshot taking time, currently it averages at 1.7 seconds

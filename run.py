@@ -8,6 +8,7 @@ from functools import lru_cache
 from multiprocessing import Pool
 import culebratester_client
 from culebratester_client.models import Point
+import random
 
 CONFIGURATION = None
 
@@ -52,7 +53,6 @@ if len(devices) == 0:
     quit()
 
 device = devices[0]
-    
 
 def get_screenshot(device):
     screenshot = device.screencap()
@@ -156,11 +156,24 @@ def perform_move(move):
     
     start_point = Point(x=int(start_x), y=int(start_y))
     end_point = Point(x=int(end_x), y=int(end_y))
-    segments = [start_point, end_point]
+    
+    # Calculate mid points with small random offset
+    mid_points = []
+    for fraction in [0.25, 0.5, 0.75]:
+        mid_x = start_x + fraction * (end_x - start_x) + random.uniform(-5, 5) 
+        mid_y = start_y + fraction * (end_y - start_y) + random.uniform(-5, 5)  
+        mid_points.append(Point(x=int(mid_x), y=int(mid_y)))
+    
+    segments = [start_point] + mid_points + [end_point]
 
-    body =  culebratester_client.SwipeBody(segments=segments, segment_steps=10)
 
+    body =  culebratester_client.SwipeBody(segments=segments, segment_steps=5)
+
+    start_time = time.time()
     api_instance.ui_device_swipe_post(body=body)
+    end_time = time.time()
+    print(f'Time to create body: {end_time - start_time}')
+
 
 
 def main():

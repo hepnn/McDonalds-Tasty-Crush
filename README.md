@@ -22,4 +22,4 @@ You can do so by enabling `Pointer location` in android developer settings and t
 4. Use OpenCV to match given template assets with the game board items
 5. Use brute force to find the best move (this should be improved)
 
-![game](game.png) ![screenshot](screenshot.png) ![screenshot_grid](screenshot_grid.png) ![screenshot_gray](screenshot_gray.png)
+![game](game.png | width=300) ![screenshot](screenshot.png | width=300) ![screenshot_grid](screenshot_grid.png | width=300) ![screenshot_gray](screenshot_gray.png | width=300)

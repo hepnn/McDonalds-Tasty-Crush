@@ -1,4 +1,4 @@
-﻿# McDonalds-Tasty-Crush - WIP
+﻿# McDonalds-Tasty-Crush
 
 
 1. Capture device screen, crop game board

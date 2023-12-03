@@ -6,7 +6,7 @@ import numpy as np
 import tkinter as tk
 import pyautogui
 from ppadb.client import Client
-from multiprocessing import Pool
+from functools import lru_cache
 
 ITEMS = {
     'burger': 1,
@@ -23,25 +23,21 @@ grid_top = 878
 grid_right = 990
 grid_bottom = 1777
 
+@lru_cache(maxsize=None)
+def load_and_resize_image(base_path, image_name, size):
+    path = f'A://code//McD-tasty-crush//{base_path}//{image_name}.jpg'
+    return cv2.resize(cv2.imread(path, 0), size)
+
+tile_size_x_y = (tile_size, tile_size)
+
 TEMPLATES = {
-    'burger': cv2.imread('A://code//McD-tasty-crush//assets//burger.jpg', 0),
-    'fries': cv2.imread('A://code//McD-tasty-crush//assets//fries.jpg', 0),
-    'milkshake': cv2.imread('A://code//McD-tasty-crush//assets//milkshake.jpg', 0),
-    'soda': cv2.imread('A://code//McD-tasty-crush//assets//soda.jpg', 0),
+    name: load_and_resize_image('assets', name, tile_size_x_y) for name in ['burger', 'fries', 'milkshake', 'soda']
 }
 
 TEMPLATES_ANIMATING = {
-    'burger': cv2.imread('A://code//McD-tasty-crush//assets_animating//burger.png', 0),
-    'fries': cv2.imread('A://code//McD-tasty-crush//assets_animating//fries.png', 0),
-    'milkshake': cv2.imread('A://code//McD-tasty-crush//assets_animating//milkshake.png', 0),
-    'soda': cv2.imread('A://code//McD-tasty-crush//assets_animating//soda.png', 0),
+    name: load_and_resize_image('assets_animating', name, tile_size_x_y) for name in ['burger', 'fries', 'milkshake', 'soda']
 }
 
-for item, template in TEMPLATES.items():
-    TEMPLATES[item] = cv2.resize(template, (tile_size, tile_size))
-
-for item, template in TEMPLATES_ANIMATING.items():
-    TEMPLATES_ANIMATING[item] = cv2.resize(template, (tile_size, tile_size))
 
 adb = Client(host='127.0.0.1', port=5037)
 devices = adb.devices()

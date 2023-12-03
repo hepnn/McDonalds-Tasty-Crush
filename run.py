@@ -7,6 +7,8 @@ import tkinter as tk
 import pyautogui
 from ppadb.client import Client
 from functools import lru_cache
+from multiprocessing import Pool
+
 
 ITEMS = {
     'burger': 1,
@@ -56,8 +58,18 @@ def get_screenshot(device):
         screenshot_gray = cv2.cvtColor(np.array(cropped_img), cv2.COLOR_RGB2GRAY)
     return screenshot_gray
 
+def match_tile(args):
+    i, j, tile, TEMPLATES = args
+    for item, template in TEMPLATES.items():
+        res = cv2.matchTemplate(tile, template, cv2.TM_CCOEFF_NORMED)
+        _, max_val, _, _ = cv2.minMaxLoc(res)
+        if max_val > 0.7:
+            return (i, j, ITEMS[item])
+    return (i, j, 0)
+
 def get_grid(screenshot_gray):
     grid = [[0 for _ in range(6)] for _ in range(6)]
+    args = []
     for i in range(6):
         for j in range(6):
             start_x = int(j * (tile_size + gap_size))
@@ -65,12 +77,14 @@ def get_grid(screenshot_gray):
             start_y = int(i * (tile_size + gap_size))
             end_y = start_y + tile_size
             tile = screenshot_gray[start_y:end_y, start_x:end_x]
-            for item, template in TEMPLATES.items():
-                res = cv2.matchTemplate(tile, template, cv2.TM_CCOEFF_NORMED)
-                _, max_val, _, _ = cv2.minMaxLoc(res)
-                if max_val > 0.7:
-                    grid[i][j] = ITEMS[item]
-                    break
+            args.append((i, j, tile, TEMPLATES))
+            
+    with Pool() as p:
+        results = p.map(match_tile, args)
+    
+    for i, j, item in results:
+        grid[i][j] = item
+
     return grid
 
 def game_state_locked(screenshot_gray, grid):
@@ -148,24 +162,12 @@ def main():
         best_move = find_best_move(grid)
         if best_move is not None and not game_state_locked(screenshot_gray, grid):
             perform_move(best_move)
-            time.sleep(2)  
         else:
             print('Game locked, waiting...')
 
         for row in grid:
             print(row)
 
-main()
-
-# root = tk.Tk()
-
-# grid_frame = tk.Frame(root)
-# grid_frame.pack()
-
-# for i in range(6):
-#     for j in range(6):
-#         cell_value = grid[i][j]
-#         cell_label = tk.Label(grid_frame, text=cell_value, relief="solid", borderwidth=1, padx=15, pady=10)
-#         cell_label.grid(row=i, column=j)
-
-# root.mainloop()
+if __name__ == '__main__':
+    main()
+    

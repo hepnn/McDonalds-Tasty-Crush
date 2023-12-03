@@ -3,8 +3,6 @@ from PIL import Image
 import cv2
 import io
 import numpy as np
-import tkinter as tk
-import pyautogui
 from ppadb.client import Client
 from functools import lru_cache
 from multiprocessing import Pool

@@ -29,8 +29,18 @@ TEMPLATES = {
     'soda': cv2.imread('A://code//McD-tasty-crush//assets//soda.jpg', 0),
 }
 
+TEMPLATES_ANIMATING = {
+    'burger': cv2.imread('A://code//McD-tasty-crush//assets_animating//burger.png', 0),
+    'fries': cv2.imread('A://code//McD-tasty-crush//assets_animating//fries.png', 0),
+    'milkshake': cv2.imread('A://code//McD-tasty-crush//assets_animating//milkshake.png', 0),
+    'soda': cv2.imread('A://code//McD-tasty-crush//assets_animating//soda.png', 0),
+}
+
 for item, template in TEMPLATES.items():
     TEMPLATES[item] = cv2.resize(template, (tile_size, tile_size))
+
+for item, template in TEMPLATES_ANIMATING.items():
+    TEMPLATES_ANIMATING[item] = cv2.resize(template, (tile_size, tile_size))
 
 adb = Client(host='127.0.0.1', port=5037)
 devices = adb.devices()
@@ -67,8 +77,26 @@ def get_grid(screenshot_gray):
     return grid
 
 def game_state_locked(device):
-    # Check if the game state is locked, meaning animations are still playing
-
+    screenshot_gray = get_screenshot(device)
+    grid = get_grid(screenshot_gray)
+    if any(0 in row for row in grid):
+        # If any tile is empty, the game is locked
+        return True
+    
+    for i in range(6):
+        for j in range(6):
+            start_x = int(j * (tile_size + gap_size))
+            end_x = start_x + tile_size
+            start_y = int(i * (tile_size + gap_size))
+            end_y = start_y + tile_size
+            tile = screenshot_gray[start_y:end_y, start_x:end_x]
+            for item, template in TEMPLATES_ANIMATING.items():
+                res = cv2.matchTemplate(tile, template, cv2.TM_CCOEFF_NORMED)
+                _, max_val, _, _ = cv2.minMaxLoc(res)
+                if max_val > 0.9:
+                    # locked                    
+                    return True
+    # If no animating template matches, the game is not locked
     return False
 
 def find_best_move(grid):
@@ -116,6 +144,8 @@ def perform_move(move):
 
     device.shell(f'input swipe {start_x} {start_y} {end_x} {end_y} 100')
 
+
+
 def main():
     while True:
         screenshot_gray = get_screenshot(device)
@@ -125,11 +155,11 @@ def main():
             perform_move(best_move)
             time.sleep(2)  
         else:
-            time.sleep(0.5)  
+            print('Game locked, waiting...')
 
-        
         for row in grid:
             print(row)
+
 main()
 
 

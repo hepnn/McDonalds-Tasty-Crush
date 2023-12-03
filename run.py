@@ -1,4 +1,3 @@
-import time
 from PIL import Image
 import cv2
 import io
@@ -32,7 +31,9 @@ grid_bottom = 1777
 @lru_cache(maxsize=None)
 def load_and_resize_image(base_path, image_name, size):
     path = f'A://code//McD-tasty-crush//{base_path}//{image_name}.jpg'
-    return cv2.resize(cv2.imread(path, 0), size)
+    img = cv2.imread(path, 0)
+    img = cv2.equalizeHist(img)
+    return cv2.resize(img, size)
 
 tile_size_x_y = (tile_size, tile_size)
 
@@ -59,6 +60,7 @@ def get_screenshot(device):
     with Image.open(io.BytesIO(screenshot)) as img:
         cropped_img = img.crop((grid_left, grid_top, grid_right, grid_bottom))
         screenshot_gray = cv2.cvtColor(np.array(cropped_img), cv2.COLOR_RGB2GRAY)
+        screenshot_gray = cv2.equalizeHist(screenshot_gray)
     return screenshot_gray
 
 def match_tile(args):
@@ -66,7 +68,7 @@ def match_tile(args):
     for item, template in TEMPLATES.items():
         res = cv2.matchTemplate(tile, template, cv2.TM_CCOEFF_NORMED)
         _, max_val, _, _ = cv2.minMaxLoc(res)
-        if max_val > 0.7:
+        if max_val > 0.8:
             return (i, j, ITEMS[item])
     return (i, j, 0)
 
@@ -169,10 +171,7 @@ def perform_move(move):
 
     body =  culebratester_client.SwipeBody(segments=segments, segment_steps=3)
 
-    start_time = time.time()
     api_instance.ui_device_swipe_post(body=body)
-    end_time = time.time()
-    print(f'Time to create body: {end_time - start_time}')
 
 
 

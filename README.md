@@ -5,7 +5,10 @@
 2. Use image matching to detect tile classes
 3. calculate the best move
 
-### Installation
+### Setup
+
+There are 2 version: run.py & run_pyautogui.py 
+Second one is using pyautogui, it is much faster and more efficient, because no delay from ADB
 
 I switched to culebra from ADB shell, because adb shell has a huge (1s +) delay
 You can follow CulebraTester2 setup guide here https://github.com/dtmilano/CulebraTester2-public
@@ -18,7 +21,7 @@ You can do so by enabling `Pointer location` in android developer settings and t
 
 1. Capture full device screen 
 2. Crop it to the grid's size
-3. Convert the RGB images to greyscale
+3. Convert the RGB images to greyscale and apply histogram equalization
 4. Use OpenCV to match given template assets with the game board items
 5. Use brute force to find the best move (this should be improved)
 

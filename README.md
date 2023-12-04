@@ -28,3 +28,4 @@ You can do so by enabling `Pointer location` in android developer settings and t
 
 TODO:
 Improve screenshot taking time, currently it averages at 1.7 seconds
+Somehow avoid hardcoded sizes and coordinates

@@ -5,6 +5,12 @@
 2. Use image matching to detect tile classes
 3. calculate the best move
 
+
+
+https://github.com/hepnn/McDonalds-Tasty-Crush/assets/47219299/48232cd2-2834-4910-babe-ce4b62a3bd19
+
+
+
 ### Setup
 
 There are 2 version: run.py & run_pyautogui.py 

@@ -14,9 +14,9 @@ https://github.com/hepnn/McDonalds-Tasty-Crush/assets/47219299/48232cd2-2834-491
 ### Setup
 
 There are 3 versions of the bot
-  * run.py - uses ADB for communication, it is slow because of getting a screenshot delay
-  * run_pyautogui.py - uses only autoguipy, much faster, because no adb connection is required, just a stream of your device (f.e scrcpy)
-  * run_combo.py - combination of both ADB and AutoGuiPy, AGP used for screenshots and ADB for swipe input (I couldn't get swipes properly functioning using AGP), it is very fast and the version that's shown in       the showcase video
+  * **run.py** - uses ADB for communication, it is slow because of getting a screenshot delay
+  * **run_pyautogui.py** - uses only autoguipy, much faster, because no adb connection is required, just a stream of your device (f.e scrcpy)
+  * **run_combo.py** - combination of both ADB and AutoGuiPy, AGP used for screenshots and ADB for swipe input (I couldn't get swipes properly functioning using AGP), it is very fast and the version that's shown  in the showcase video
 
 I switched to culebra from ADB shell, because adb shell has a huge (1s +) delay
 You can follow CulebraTester2 setup guide here https://github.com/dtmilano/CulebraTester2-public

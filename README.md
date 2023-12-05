@@ -13,8 +13,10 @@ https://github.com/hepnn/McDonalds-Tasty-Crush/assets/47219299/48232cd2-2834-491
 
 ### Setup
 
-There are 2 version: run.py & run_pyautogui.py 
-Second one is using pyautogui, it is much faster and more efficient, because no delay from ADB
+There are 3 versions of the bot
+  * run.py - uses ADB for communication, it is slow because of getting a screenshot delay
+  * run_pyautogui.py - uses only autoguipy, much faster, because no adb connection is required, just a stream of your device (f.e scrcpy)
+  * run_combo.py - combination of both ADB and AutoGuiPy, AGP used for screenshots and ADB for swipe input (I couldn't get swipes properly functioning using AGP), it is very fast and the version that's shown in       the showcase video
 
 I switched to culebra from ADB shell, because adb shell has a huge (1s +) delay
 You can follow CulebraTester2 setup guide here https://github.com/dtmilano/CulebraTester2-public
@@ -33,5 +35,5 @@ You can do so by enabling `Pointer location` in android developer settings and t
 
 
 TODO:
-Improve screenshot taking time, currently it averages at 1.7 seconds
 Somehow avoid hardcoded sizes and coordinates
+Improve match finding algo

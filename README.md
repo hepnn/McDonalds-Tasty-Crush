@@ -35,5 +35,5 @@ You can do so by enabling `Pointer location` in android developer settings and t
 
 
 TODO:
-Somehow avoid hardcoded sizes and coordinates
-Improve match finding algo
+* Somehow avoid hardcoded sizes and coordinates
+* Improve match finding algo
